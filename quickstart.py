@@ -30,12 +30,12 @@ if not creds or not creds.valid:
 
 service = build('calendar', 'v3', credentials=creds)
 
-    # calendar = {
+   
 def addEvent(assignmentID, assignmentName, assignmentTime):
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
-    
+    # calendar = {
     #     'summary': 'Canvas Assignments 2.0',
     #     'timeZone': 'America/Los_Angeles'
     # }
@@ -57,6 +57,7 @@ def addEvent(assignmentID, assignmentName, assignmentTime):
     #     start = event['start'].get('dateTime', event['start'].get('date'))
     #     print(start, event['summary'])
     event = {
+        'id': assignmentID,
         'summary': assignmentName,
         'location': '800 Howard St., San Francisco, CA 94103',
         'description': assignmentID,
@@ -68,23 +69,96 @@ def addEvent(assignmentID, assignmentName, assignmentTime):
             'dateTime': assignmentTime,
             'timeZone': 'UTC',
         },
-        'recurrence': [
-            'RRULE:FREQ=DAILY;COUNT=2'
-        ],
-        'attendees': [
-            {'email': 'lpage@example.com'},
-            {'email': 'sbrin@example.com'},
-        ],
+        
         'reminders': {
             'useDefault': False,
             'overrides': [
                 {'method': 'email', 'minutes': 24 * 60},
-                {'method': 'popup', 'minutes': 10},
+                {'method': 'popup', 'minutes': 60},
+            ],
+        },
+    }
+    event = service.events().insert(calendarId='primary', body=event).execute()
+    print(event)
+    #print(event['eventId'])
+
+def editEvent(assignmentID, assignmentName, assignmentTime):
+    print("edit event")
+    event = {
+        'id': assignmentID,
+        'summary': assignmentName,
+        'location': '800 Howard St., San Francisco, CA 94103',
+        'description': assignmentID,
+        'start': {
+            'dateTime': assignmentTime,
+            'timeZone': 'UTC',
+        },
+        'end': {
+            'dateTime': assignmentTime,
+            'timeZone': 'UTC',
+        },
+        
+        'reminders': {
+            'useDefault': False,
+            'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},
+                {'method': 'popup', 'minutes': 60},
+            ],
+        },
+    }
+    event = service.events().update(calendarId='primary', body=event, eventId = str(assignmentID)).execute()
+    
+    # """Shows basic usage of the Google Calendar API.
+    # Prints the start and name of the next 10 events on the user's calendar.
+    # """    
+    # #now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+    # now = datetime.datetime.utcnow().replace(day=1) - datetime.timedelta(days=1)
+    # now = now.isoformat() + 'Z'
+    # events_result = service.events().list(calendarId='primary', timeMin=now,
+    #                                     maxResults=50, singleEvents=True,
+    #                                     orderBy='startTime').execute()
+    # events = events_result.get('items', [])
+    # if not events:
+    #     return -2
+    # print(type(assignmentID))
+    # for event in events:
+    #     #print(event['description'])
+    #     print(event.get('description'))
+    #     print(type(event.get('description')))
+    #     if str(assignmentID) == event.get('description'):
+    #         service.events().delete(calendarId='primary', eventId=event.get).execute()
+
+
+    #         return 0
+    
+    # return -1
+
+
+    '''
+    event = {
+        'summary': assignmentName,
+        'location': '800 Howard St., San Francisco, CA 94103',
+        'description': assignmentID,
+        'start': {
+            'dateTime': assignmentTime,
+            'timeZone': 'UTC',
+        },
+        'end': {
+            'dateTime': assignmentTime,
+            'timeZone': 'UTC',
+        },
+        
+        'reminders': {
+            'useDefault': False,
+            'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},
+                {'method': 'popup', 'minutes': 60},
             ],
         },
     }
     event = service.events().insert(calendarId='primary', body=event).execute()
 
     #events.insert()
+    '''
 
 # main('test assignment', '456', 10)

@@ -1,7 +1,9 @@
 from canvasapi import Canvas
 #import dateutil.parser
-
+import ast
 import quickstart
+import os.path
+from os import path
 
 # Canvas API URL
 API_URL = "https://gatech.instructure.com"
@@ -10,6 +12,14 @@ API_KEY = "rqOi4RFycbD67YL7rRispL5yS9GmqTAHH83hy90A9I6jYuTAAGaWbx85DSJHJ5dJ"
 
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
+if path.exists('dict.txt'):
+    file = open('dict.txt', 'r')
+    for s in file:
+        d = ast.literal_eval(s)
+else:
+    d = {}
+
+#print(d)
 
 for course in canvas.get_courses(enrollment_state='active'):
     # print(course.name, course.id)
@@ -17,10 +27,21 @@ for course in canvas.get_courses(enrollment_state='active'):
         for assignment in course.get_assignments():
             # print(assignment.name, dateutil.parser.isoparse(assignment.due_at))
             if assignment.due_at is not None:
-                print(assignment.name)
-                quickstart.addEvent(assignment.id, assignment.name, assignment.due_at)
+                #print(assignment.name)
+                if(assignment.id) in d.keys():
+                    if((assignment.name,assignment.due_at) != d[assignment.id]):
+                        print(quickstart.editEvent(assignment.id, assignment.name + '*', assignment.due_at))
+                    else:
+                        continue
+                else:
+                    quickstart.addEvent(assignment.id, assignment.name, assignment.due_at)   
+                d[assignment.id] = (assignment.name, assignment.due_at)
             else:
-                print(assignment.name)
+                pass
+                #print(assignment.name)
 
-print()
-input("Press Enter to exit...")
+file = open('dict.txt', 'w')
+file.write(str(d))
+file.close()
+
+#input("Press Enter to exit...")
