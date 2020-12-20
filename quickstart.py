@@ -13,6 +13,8 @@ creds = None
 # The file token.pickle stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
+input()
+
 if os.path.exists('token.pickle'):
     with open('token.pickle', 'rb') as token:
         creds = pickle.load(token)
@@ -30,32 +32,10 @@ if not creds or not creds.valid:
 
 service = build('calendar', 'v3', credentials=creds)
 
-    # calendar = {
 def addEvent(assignmentID, assignmentName, assignmentTime):
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
-    
-    #     'summary': 'Canvas Assignments 2.0',
-    #     'timeZone': 'America/Los_Angeles'
-    # }
-
-    # created_calendar = service.calendars().insert(body=calendar).execute()
-    # ourCalendarId = created_calendar['id']
-    # print(ourCalendarId) 
-    # Call the Calendar API
-    # now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    # print('Getting the upcoming 10 events')
-    # events_result = service.events().list(calendarId='primary', timeMin=now,
-    #                                     maxResults=10, singleEvents=True,
-    #                                     orderBy='startTime').execute()
-    # events = events_result.get('items', [])
-
-    # if not events:
-    #     print('No upcoming events found.')
-    # for event in events:
-    #     start = event['start'].get('dateTime', event['start'].get('date'))
-    #     print(start, event['summary'])
     event = {
         'summary': assignmentName,
         'location': '800 Howard St., San Francisco, CA 94103',
@@ -68,23 +48,11 @@ def addEvent(assignmentID, assignmentName, assignmentTime):
             'dateTime': assignmentTime,
             'timeZone': 'UTC',
         },
-        'recurrence': [
-            'RRULE:FREQ=DAILY;COUNT=2'
-        ],
-        'attendees': [
-            {'email': 'lpage@example.com'},
-            {'email': 'sbrin@example.com'},
-        ],
         'reminders': {
             'useDefault': False,
             'overrides': [
-                {'method': 'email', 'minutes': 24 * 60},
-                {'method': 'popup', 'minutes': 10},
+                {'method': 'popup', 'minutes': 60},
             ],
         },
     }
     event = service.events().insert(calendarId='primary', body=event).execute()
-
-    #events.insert()
-
-# main('test assignment', '456', 10)

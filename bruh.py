@@ -11,6 +11,8 @@ API_KEY = "rqOi4RFycbD67YL7rRispL5yS9GmqTAHH83hy90A9I6jYuTAAGaWbx85DSJHJ5dJ"
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
 
+input()
+
 for course in canvas.get_courses(enrollment_state='active'):
     # print(course.name, course.id)
     if course.id == 130456:
