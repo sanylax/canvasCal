@@ -2,19 +2,16 @@
 from canvasapi import Canvas
 
 # Canvas API URL
-<<<<<<< HEAD
 API_URL = "https://gatech.instructure.com"
-=======
-API_URL = "https://example.com"
->>>>>>> 45cf755192033b40bde9b7a9bbaac433fa9662b1
 # Canvas API key
-API_KEY = "p@$$w0rd"
+API_KEY = "rqOi4RFycbD67YL7rRispL5yS9GmqTAHH83hy90A9I6jYuTAAGaWbx85DSJHJ5dJ"
 
 # Initialize a new Canvas object
-<<<<<<< HEAD
-canvas = Canvas(API_URL, API_KEY)
-=======
 canvas = Canvas(API_URL, API_KEY)
 
-print(API_URL)
->>>>>>> 45cf755192033b40bde9b7a9bbaac433fa9662b1
+for course in canvas.get_courses(enrollment_state='active'):
+    # print(course.name, course.id)
+
+    if course.id == 130456:
+        for assignment in course.get_assignments():
+            print(assignment.name, assignment.due_at)
