@@ -47,10 +47,10 @@ def createCalendar():
         'summary': 'Canvas Assignments 2.0',
         'timeZone': 'America/Los_Angeles'
     }
-
     created_calendar = service.calendars().insert(body=calendar).execute()
     ourCalendarId = created_calendar['id']
     print(ourCalendarId)
+    print(created_calendar['summary'])
     return ourCalendarId
     
     
@@ -82,7 +82,7 @@ def addEvent(assignmentID, assignmentName, assignmentTime, calendar):
         },
     }
     event = service.events().insert(calendarId = calendar, body=event).execute()
-    print(event)
+    #print(event)
     #print(event['eventId'])
 
 def editEvent(assignmentID, assignmentName, assignmentTime):

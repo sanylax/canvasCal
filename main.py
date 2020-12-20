@@ -1,7 +1,7 @@
 from canvasapi import Canvas
 #import dateutil.parser
 import ast
-import quickstart
+import gcal
 import os.path
 from os import path
 
@@ -37,11 +37,11 @@ if(True):
                     #print(assignment.name)
                     if(assignment.id) in d.keys():
                         if((assignment.name,assignment.due_at) != d[assignment.id]):
-                            print(quickstart.editEvent(assignment.id, assignment.name + '*', assignment.due_at, calendarid))
+                            print(gcal.editEvent(assignment.id, assignment.name + '*', assignment.due_at, calendarid))
                         else:
                             continue
                     else:
-                        quickstart.addEvent(assignment.id, assignment.name, assignment.due_at, calendarid)   
+                        gcal.addEvent(assignment.id, assignment.name, assignment.due_at, calendarid)   
                     d[assignment.id] = (assignment.name, assignment.due_at)
                 else:
                     pass
@@ -56,7 +56,7 @@ if(True):
     file.close()
 
 else:
-    quickstart.printCalendars()
+    gcal.printCalendars()
 
 
 #input("Press Enter to exit...")
