@@ -1,5 +1,7 @@
-# Import the Canvas class
 from canvasapi import Canvas
+import dateutil.parser
+
+import quickstart
 
 # Canvas API URL
 API_URL = "https://gatech.instructure.com"
@@ -11,7 +13,14 @@ canvas = Canvas(API_URL, API_KEY)
 
 for course in canvas.get_courses(enrollment_state='active'):
     # print(course.name, course.id)
-
     if course.id == 130456:
         for assignment in course.get_assignments():
-            print(assignment.name, assignment.due_at)
+            # print(assignment.name, dateutil.parser.isoparse(assignment.due_at))
+            if assignment.due_at is not None:
+                print(assignment.name, dateutil.parser.isoparse(assignment.due_at))
+                quickstart.main(assignment.id, assignment.name, assignment.due_at)
+            else:
+                print(assignment.name)
+
+print()
+input("Press Enter to exit...")

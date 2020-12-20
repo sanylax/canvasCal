@@ -44,28 +44,28 @@ def main(assignmentID, assignmentName, assignmentTime):
     # ourCalendarId = created_calendar['id']
     # print(ourCalendarId) 
     # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
+    # now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+    # print('Getting the upcoming 10 events')
+    # events_result = service.events().list(calendarId='primary', timeMin=now,
+    #                                     maxResults=10, singleEvents=True,
+    #                                     orderBy='startTime').execute()
+    # events = events_result.get('items', [])
 
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+    # if not events:
+    #     print('No upcoming events found.')
+    # for event in events:
+    #     start = event['start'].get('dateTime', event['start'].get('date'))
+    #     print(start, event['summary'])
     event = {
         'summary': assignmentName,
         'location': '800 Howard St., San Francisco, CA 94103',
         'description': assignmentID,
         'start': {
-            'dateTime': '2020-12-19T17:00:00Z',
+            'dateTime': assignmentTime,
             'timeZone': 'UTC',
         },
         'end': {
-            'dateTime': '2020-12-19T18:00:00Z',
+            'dateTime': assignmentTime,
             'timeZone': 'UTC',
         },
         'recurrence': [
@@ -87,4 +87,4 @@ def main(assignmentID, assignmentName, assignmentTime):
 
     #events.insert()
 
-main('test assignment', '456', 10)
+# main('test assignment', '456', 10)
