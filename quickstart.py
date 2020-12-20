@@ -30,32 +30,35 @@ if not creds or not creds.valid:
 
 service = build('calendar', 'v3', credentials=creds)
 
-   
-def addEvent(assignmentID, assignmentName, assignmentTime):
+def printCalendars():
+    page_token = None
+    while True:
+        calendar_list = service.calendarList().list(pageToken=page_token).execute()
+        for calendar_list_entry in calendar_list['items']:
+            print(calendar_list_entry['summary']) 
+            print(calendar_list_entry['id'])
+
+        page_token = calendar_list.get('nextPageToken')
+        if not page_token:
+            break
+
+def createCalendar():
+    calendar = {
+        'summary': 'Canvas Assignments 2.0',
+        'timeZone': 'America/Los_Angeles'
+    }
+
+    created_calendar = service.calendars().insert(body=calendar).execute()
+    ourCalendarId = created_calendar['id']
+    print(ourCalendarId)
+    return ourCalendarId
+    
+    
+
+def addEvent(assignmentID, assignmentName, assignmentTime, calendar):
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
-    # calendar = {
-    #     'summary': 'Canvas Assignments 2.0',
-    #     'timeZone': 'America/Los_Angeles'
-    # }
-
-    # created_calendar = service.calendars().insert(body=calendar).execute()
-    # ourCalendarId = created_calendar['id']
-    # print(ourCalendarId) 
-    # Call the Calendar API
-    # now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    # print('Getting the upcoming 10 events')
-    # events_result = service.events().list(calendarId='primary', timeMin=now,
-    #                                     maxResults=10, singleEvents=True,
-    #                                     orderBy='startTime').execute()
-    # events = events_result.get('items', [])
-
-    # if not events:
-    #     print('No upcoming events found.')
-    # for event in events:
-    #     start = event['start'].get('dateTime', event['start'].get('date'))
-    #     print(start, event['summary'])
     event = {
         'id': assignmentID,
         'summary': assignmentName,
@@ -78,7 +81,7 @@ def addEvent(assignmentID, assignmentName, assignmentTime):
             ],
         },
     }
-    event = service.events().insert(calendarId='primary', body=event).execute()
+    event = service.events().insert(calendarId = calendar, body=event).execute()
     print(event)
     #print(event['eventId'])
 
@@ -106,7 +109,7 @@ def editEvent(assignmentID, assignmentName, assignmentTime):
             ],
         },
     }
-    event = service.events().update(calendarId='primary', body=event, eventId = str(assignmentID)).execute()
+    event = service.events().update(calendarId=calendar, body=event, eventId = str(assignmentID)).execute()
     
     # """Shows basic usage of the Google Calendar API.
     # Prints the start and name of the next 10 events on the user's calendar.

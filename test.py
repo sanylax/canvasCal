@@ -40,17 +40,29 @@ def main():
     now = datetime.datetime.utcnow().replace(day=1) - datetime.timedelta(days=1)
     now = now.isoformat() + 'Z'
 
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                        maxResults=10, singleEvents=True,
-                                        orderBy='startTime').execute()
-    events = events_result.get('items', [])
-
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+  
+    event = {
+        'summary': 'assignmentName',
+        'location': '800 Howard St., San Francisco, CA 94103',
+        'description': 'assignmentID',
+        'start': {
+            'dateTime': '2015-05-28T09:00:00-07:00',
+            'timeZone': 'UTC',
+        },
+        'end': {
+            'dateTime': '2015-05-28T09:00:00-07:00',
+            'timeZone': 'UTC',
+        },
+        
+        'reminders': {
+            'useDefault': False,
+            'overrides': [
+                {'method': 'email', 'minutes': 24 * 60},
+                {'method': 'popup', 'minutes': 60},
+            ],
+        },
+    }
+    event = service.events().insert(calendarId='addressbook#contacts@group.v.calendar.google.com', body=event).execute()    
 
 
 if __name__ == '__main__':

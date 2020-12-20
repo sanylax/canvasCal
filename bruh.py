@@ -19,29 +19,44 @@ if path.exists('dict.txt'):
 else:
     d = {}
 
+if path.exists('calendar.txt'):
+    file = open('calendar.txt', 'r')
+    for s in file:
+        calendarid = s
+else:
+    calendarid = quickstart.createCalendar()
+
 #print(d)
-
-for course in canvas.get_courses(enrollment_state='active'):
-    # print(course.name, course.id)
-    if course.id == 130456:
-        for assignment in course.get_assignments():
-            # print(assignment.name, dateutil.parser.isoparse(assignment.due_at))
-            if assignment.due_at is not None:
-                #print(assignment.name)
-                if(assignment.id) in d.keys():
-                    if((assignment.name,assignment.due_at) != d[assignment.id]):
-                        print(quickstart.editEvent(assignment.id, assignment.name + '*', assignment.due_at))
+if(True):
+    for course in canvas.get_courses(enrollment_state='active'):
+        # print(course.name, course.id)
+        if course.id == 130456:
+            for assignment in course.get_assignments():
+                # print(assignment.name, dateutil.parser.isoparse(assignment.due_at))
+                if assignment.due_at is not None:
+                    #print(assignment.name)
+                    if(assignment.id) in d.keys():
+                        if((assignment.name,assignment.due_at) != d[assignment.id]):
+                            print(quickstart.editEvent(assignment.id, assignment.name + '*', assignment.due_at, calendarid))
+                        else:
+                            continue
                     else:
-                        continue
+                        quickstart.addEvent(assignment.id, assignment.name, assignment.due_at, calendarid)   
+                    d[assignment.id] = (assignment.name, assignment.due_at)
                 else:
-                    quickstart.addEvent(assignment.id, assignment.name, assignment.due_at)   
-                d[assignment.id] = (assignment.name, assignment.due_at)
-            else:
-                pass
-                #print(assignment.name)
+                    pass
+                    #print(assignment.name)
 
-file = open('dict.txt', 'w')
-file.write(str(d))
-file.close()
+    file = open('dict.txt', 'w')
+    file.write(str(d))
+    file.close()
+
+    file = open('calendar.txt', 'w')
+    file.write(str(calendarid))
+    file.close()
+
+else:
+    quickstart.printCalendars()
+
 
 #input("Press Enter to exit...")
