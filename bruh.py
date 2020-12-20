@@ -1,5 +1,5 @@
 from canvasapi import Canvas
-import dateutil.parser
+#import dateutil.parser
 
 import quickstart
 
@@ -17,8 +17,8 @@ for course in canvas.get_courses(enrollment_state='active'):
         for assignment in course.get_assignments():
             # print(assignment.name, dateutil.parser.isoparse(assignment.due_at))
             if assignment.due_at is not None:
-                print(assignment.name, dateutil.parser.isoparse(assignment.due_at))
-                quickstart.main(assignment.id, assignment.name, assignment.due_at)
+                print(assignment.name)
+                quickstart.addEvent(assignment.id, assignment.name, assignment.due_at)
             else:
                 print(assignment.name)
 
