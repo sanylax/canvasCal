@@ -24,7 +24,7 @@ if path.exists('calendar.txt'):
     for s in file:
         calendarid = s
 else:
-    calendarid = quickstart.createCalendar()
+    calendarid = gcal.createCalendar()
 
 #print(d)
 if(True):
