@@ -38,26 +38,29 @@ blacklist = []
 if path.exists('courseBlacklist.txt'):
     for s in file:
         blacklist.append(s)
-
-
-
-
+else:
+    for course in canvas.get_courses(enrollment_state='active'):
+        print(course.name)
+        choice = input('type y if you want to ignore this course or anything else to keep it')
+        if upper(choice) == 'Y':
+            blacklist.append(course.id)
 
 for course in canvas.get_courses(enrollment_state='active'):
-    if course.id == 130456:
-        for assignment in course.get_assignments():
-            if assignment.due_at is not None:
-                if(assignment.id) in d.keys():
-                    if((assignment.name,assignment.due_at) != d[assignment.id]):
-                        print(gcal.editEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid))
+    if course not in blacklist:
+        if course.id == 130456:
+            for assignment in course.get_assignments():
+                if assignment.due_at is not None:
+                    if(assignment.id) in d.keys():
+                        if((assignment.name,assignment.due_at) != d[assignment.id]):
+                            print(gcal.editEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid))
+                        else:
+                            continue
                     else:
-                        continue
+                        gcal.addEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid)   
+                    d[assignment.id] = (assignment.name, assignment.due_at)
                 else:
-                    gcal.addEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid)   
-                d[assignment.id] = (assignment.name, assignment.due_at)
-            else:
-                pass
-                #print(assignment.name)
+                    pass
+                    #print(assignment.name)
 
 file = open('dict.txt', 'w')
 file.write(str(d))
@@ -65,6 +68,11 @@ file.close()
 
 file = open('calendar.txt', 'w')
 file.write(str(calendarid))
+file.close()
+
+file = open('blacklist.txt', 'w')
+for s in blacklist:
+    file.write(str(s))
 file.close()
 
 input("Press Enter to exit...")
