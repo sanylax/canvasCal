@@ -49,27 +49,30 @@ def main():
 
     blacklist = []
     whitelist = []
-    if path.exists('courseBlacklist.txt'):
+    if path.exists('blacklist.txt'):
+        # while True:
+        #     line = file.readline()
+        #     if not line:
+        #         break
+        #     blacklist.append(line.strip())
+        file = open('blacklist.txt', 'r')
         for s in file:
-            blacklist.append(s)
+            blacklist.append(s.strip())
     else:
         for course in canvas.get_courses(enrollment_state='active'):
             print(course.name)
             choice = input('type y if you want to keep this course or anything else to ignore it: ')
             if choice.upper() != 'Y':
-                blacklist.append(course.id)
+                blacklist.append(str(course.id))
             else:
-                whitelist.append(course.id)
-
-        print("The following courses will be displayed:")
+                whitelist.append(course.name)
+        print()
+        print("The following courses will be added to your calendar:")
         for course in whitelist:
-            print(course)
-        print("The following courses will NOT be displayed")
-        for course in blacklist:
             print(course)
 
     for course in canvas.get_courses(enrollment_state='active'):
-        if course.id not in blacklist:
+        if str(course.id) not in blacklist:
             for assignment in course.get_assignments():
                 if assignment.due_at is not None:
                     if(assignment.id) in d.keys():
@@ -97,11 +100,12 @@ def main():
 
     file = open('blacklist.txt', 'w')
     for s in blacklist:
-        file.write(str(s))
+        file.write(str(s) + '\n')
     file.close()
 
 import time
 
 while True:
     main()
+    print("Updated calendar...")
     time.sleep(60 * 60 * 6)
