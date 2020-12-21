@@ -16,7 +16,6 @@ else:
     file.write(API_URL + '\n')
     file.write(API_KEY)
 
-exit()
 # Canvas API key
 # exit()
 # Initialize a new Canvas object
