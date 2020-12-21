@@ -51,11 +51,13 @@ for course in canvas.get_courses(enrollment_state='active'):
             if assignment.due_at is not None:
                 if(assignment.id) in d.keys():
                     if((assignment.name,assignment.due_at) != d[assignment.id]):
-                        print(gcal.editEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid))
+                        description  = f'<a href="{assignment.html_url}">Link to assignment on Canvas</a><br />' + assignment.description
+                        print(gcal.editEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid))
                     else:
                         continue
                 else:
-                    gcal.addEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid)   
+                    description  = f'<a href="{assignment.html_url}">Link to assignment on Canvas</a><br />' + assignment.description
+                    gcal.addEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid)   
                 d[assignment.id] = (assignment.name, assignment.due_at)
             else:
                 pass
