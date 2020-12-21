@@ -42,7 +42,7 @@ else:
     for course in canvas.get_courses(enrollment_state='active'):
         print(course.name)
         choice = input('type y if you want to ignore this course or anything else to keep it')
-        if upper(choice) == 'Y':
+        if choice.upper() == 'Y':
             blacklist.append(course.id)
 
 for course in canvas.get_courses(enrollment_state='active'):
