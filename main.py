@@ -1,8 +1,16 @@
 from canvasapi import Canvas
 import ast
 import gcal
-import os.path
 from os import path
+from plyer.utils import platform
+from plyer import notification
+def failed():
+    notification.notify(
+        title='CanvasCal failed to run',
+        message='Please run setup.exe',
+        app_name='CanvasCal',
+        #app_icon='path/to/the/icon.' + ('ico' if platform == 'win' else 'png')
+    )
 
 def getDescription(assignment):
     if assignment.html_url and assignment.description:
@@ -13,7 +21,6 @@ def getDescription(assignment):
         description = '<a href="{assignment.html_url}">Link to assignment on Canvas</a>'
     else:
         description = ''
-
     return description
 
 def main():
@@ -22,12 +29,9 @@ def main():
         file = open('canvas.txt', 'r')
         API_URL = file.readline().strip()
         API_KEY = file.readline().strip()
+        file.close()
     else:
-        API_URL = input("Please enter your institution's canvas url (like 'https://example.instructure.com'): ")
-        API_KEY = input("Please enter your canvas API key: ")
-        file = open('canvas.txt', 'w')
-        file.write(API_URL + '\n')
-        file.write(API_KEY)
+        failed()
 
     # Canvas API key
     # exit()
@@ -37,15 +41,17 @@ def main():
         file = open('dict.txt', 'r')
         for s in file:
             d = ast.literal_eval(s)
+        file.close()
     else:
-        d = {}
+        failed()
 
     if path.exists('calendar.txt'):
         file = open('calendar.txt', 'r')
         for s in file:
             calendarid = s
+        file.close()
     else:
-        calendarid = gcal.createCalendar()
+        failed()
 
     blacklist = []
     whitelist = []
@@ -58,18 +64,10 @@ def main():
         file = open('blacklist.txt', 'r')
         for s in file:
             blacklist.append(s.strip())
+        file.close()
+
     else:
-        for course in canvas.get_courses(enrollment_state='active'):
-            print(course.name)
-            choice = input('type y if you want to keep this course or anything else to ignore it: ')
-            if choice.upper() != 'Y':
-                blacklist.append(str(course.id))
-            else:
-                whitelist.append(course.name)
-        print()
-        print("The following courses will be added to your calendar:")
-        for course in whitelist:
-            print(course)
+       failed()
 
     for course in canvas.get_courses(enrollment_state='active'):
         if str(course.id) not in blacklist:
@@ -104,8 +102,11 @@ def main():
     file.close()
 
 import time
+failed()
+exit()
 
-while True:
-    main()
-    print("Updated calendar...")
-    time.sleep(60 * 60 * 6)
+# while True:
+    
+#     main()
+#     print("Updated calendar...")
+#     time.sleep(60 * 60 * 6)

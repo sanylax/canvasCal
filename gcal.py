@@ -46,8 +46,8 @@ def printCalendars():
 
 def createCalendar():
     calendar = {
-        'summary': 'Canvas Assignments 2.0',
-        'timeZone': 'America/Los_Angeles'
+        'summary': 'Canvas Assignments',
+        'timeZone': 'UTC'
     }
     created_calendar = service.calendars().insert(body=calendar).execute()
     ourCalendarId = created_calendar['id']
