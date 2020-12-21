@@ -35,6 +35,15 @@ if path.exists('calendar.txt'):
 else:
     calendarid = gcal.createCalendar()
 
+blacklist = []
+if path.exists('courseBlacklist.txt'):
+    for s in file:
+        blacklist.append(s)
+
+
+
+
+
 for course in canvas.get_courses(enrollment_state='active'):
     if course.id == 130456:
         for assignment in course.get_assignments():

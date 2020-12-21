@@ -21,7 +21,7 @@ if not creds or not creds.valid:
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
     else:
-        credConfig = {"installed":{"client_id":"806245814001-v03kkhur6vm9asi8q9gblgtef52552su.apps.googleusercontent.com","project_id":"canvas-1608438105562","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"gWnHi74RqUDtHffznIxfCLGs","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
+        credConfig = {"installed":{"client_id":"716399777084-q3nv38445ht9qnopi4s822naq7nqm6hc.apps.googleusercontent.com","project_id":"canvascal-1608517477785","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"u6xmpI1XiVxKh23lEhMxxHgr","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
         # flow = InstalledAppFlow.from_client_secrets_file(
         #     'credentials.json', SCOPES)
         flow = InstalledAppFlow.from_client_config(credConfig, SCOPES)
