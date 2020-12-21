@@ -41,7 +41,7 @@ if path.exists('courseBlacklist.txt'):
 else:
     for course in canvas.get_courses(enrollment_state='active'):
         print(course.name)
-        choice = input('type y if you want to ignore this course or anything else to keep it')
+        choice = input('type y if you want to ignore this course or anything else to keep it: ')
         if choice.upper() == 'Y':
             blacklist.append(course.id)
 
