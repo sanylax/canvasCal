@@ -35,6 +35,7 @@ else:
     calendarid = gcal.createCalendar()
 
 blacklist = []
+whitelist = []
 if path.exists('courseBlacklist.txt'):
     for s in file:
         blacklist.append(s)
@@ -44,9 +45,18 @@ else:
         choice = input('type y if you want to keep this course or anything else to ignore it: ')
         if choice.upper() != 'Y':
             blacklist.append(course.id)
+        else:
+            whitelist.append(course.id)
+    print("The following courses will be displayed:")
+    for course in whitelist:
+        print(course)
+    print("The following courses will NOT be displayed")
+    for course in blacklist:
+        print(course)
+    
 
 for course in canvas.get_courses(enrollment_state='active'):
-    if course not in blacklist:
+    if str(course.id) not in blacklist:
         for assignment in course.get_assignments():
             if assignment.due_at is not None:
                 if(assignment.id) in d.keys():
