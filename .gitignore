@@ -5,6 +5,8 @@ token.pickle
 *.exe
 clientid.json
 calendar.txt
+canvas.txt
+dict.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,windows,vim,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,vim,python

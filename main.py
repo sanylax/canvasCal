@@ -5,10 +5,20 @@ import os.path
 from os import path
 
 # Canvas API URL
-API_URL = "https://gatech.instructure.com"
-# Canvas API key
-API_KEY = "rqOi4RFycbD67YL7rRispL5yS9GmqTAHH83hy90A9I6jYuTAAGaWbx85DSJHJ5dJ"
+if path.exists('canvas.txt'):
+    file = open('canvas.txt', 'r')
+    API_URL = file.readline().strip()
+    API_KEY = file.readline().strip()
+else:
+    API_URL = input("Please enter your institution's canvas url (like 'https://example.instructure.com'): ")
+    API_KEY = input("Please enter your canvas API key: ")
+    file = open('canvas.txt', 'w')
+    file.write(API_URL + '\n')
+    file.write(API_KEY)
 
+exit()
+# Canvas API key
+# exit()
 # Initialize a new Canvas object
 canvas = Canvas(API_URL, API_KEY)
 if path.exists('dict.txt'):
