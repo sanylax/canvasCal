@@ -46,13 +46,11 @@ else:
         if choice.upper() != 'Y':
             blacklist.append(course.id)
         else:
-            whitelist.append(course.id)
+            whitelist.append(course.name)
     print("The following courses will be displayed:")
     for course in whitelist:
         print(course)
-    print("The following courses will NOT be displayed")
-    for course in blacklist:
-        print(course)
+
     
 
 for course in canvas.get_courses(enrollment_state='active'):
