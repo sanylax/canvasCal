@@ -45,6 +45,9 @@ else:
         if choice.upper() == 'Y':
             blacklist.append(course.id)
 
+print('Assignments from these courses will not be added to your calendar'):
+for x in blacklist:
+    print
 for course in canvas.get_courses(enrollment_state='active'):
     if course not in blacklist:
         for assignment in course.get_assignments():
