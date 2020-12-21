@@ -25,34 +25,28 @@ if path.exists('calendar.txt'):
 else:
     calendarid = gcal.createCalendar()
 
-#print(d)
-if(True):
-    for course in canvas.get_courses(enrollment_state='active'):
-        if course.id == 130456:
-            for assignment in course.get_assignments():
-                if assignment.due_at is not None:
-                    if(assignment.id) in d.keys():
-                        if((assignment.name,assignment.due_at) != d[assignment.id]):
-                            print(gcal.editEvent(assignment.id, assignment.name + '*', assignment.due_at, calendarid))
-                        else:
-                            continue
+for course in canvas.get_courses(enrollment_state='active'):
+    if course.id == 130456:
+        for assignment in course.get_assignments():
+            if assignment.due_at is not None:
+                if(assignment.id) in d.keys():
+                    if((assignment.name,assignment.due_at) != d[assignment.id]):
+                        print(gcal.editEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid))
                     else:
-                        gcal.addEvent(assignment.id, assignment.name, assignment.due_at, calendarid)   
-                    d[assignment.id] = (assignment.name, assignment.due_at)
+                        continue
                 else:
-                    pass
-                    #print(assignment.name)
+                    gcal.addEvent(assignment.id, assignment.name, assignment.due_at, assignment.description, calendarid)   
+                d[assignment.id] = (assignment.name, assignment.due_at)
+            else:
+                pass
+                #print(assignment.name)
 
-    file = open('dict.txt', 'w')
-    file.write(str(d))
-    file.close()
+file = open('dict.txt', 'w')
+file.write(str(d))
+file.close()
 
-    file = open('calendar.txt', 'w')
-    file.write(str(calendarid))
-    file.close()
+file = open('calendar.txt', 'w')
+file.write(str(calendarid))
+file.close()
 
-else:
-    gcal.printCalendars()
-
-
-#input("Press Enter to exit...")
+input("Press Enter to exit...")

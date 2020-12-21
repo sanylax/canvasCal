@@ -21,8 +21,10 @@ if not creds or not creds.valid:
     if creds and creds.expired and creds.refresh_token:
         creds.refresh(Request())
     else:
-        flow = InstalledAppFlow.from_client_secrets_file(
-            'credentials.json', SCOPES)
+        credConfig = {"installed":{"client_id":"806245814001-v03kkhur6vm9asi8q9gblgtef52552su.apps.googleusercontent.com","project_id":"canvas-1608438105562","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"gWnHi74RqUDtHffznIxfCLGs","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
+        # flow = InstalledAppFlow.from_client_secrets_file(
+        #     'credentials.json', SCOPES)
+        flow = InstalledAppFlow.from_client_config(credConfig, SCOPES)
         creds = flow.run_local_server(port=0)
     # Save the credentials for the next run
     with open('token.pickle', 'wb') as token:
@@ -55,15 +57,14 @@ def createCalendar():
     
     
 
-def addEvent(assignmentID, assignmentName, assignmentTime, calendar):
+def addEvent(assignmentID, assignmentName, assignmentTime, assignmentDescription, calendar):
     """Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
     event = {
         'id': assignmentID,
         'summary': assignmentName,
-        'location': '800 Howard St., San Francisco, CA 94103',
-        'description': assignmentID,
+        'description': assignmentDescription,
         'start': {
             'dateTime': assignmentTime,
             'timeZone': 'UTC',
@@ -85,13 +86,12 @@ def addEvent(assignmentID, assignmentName, assignmentTime, calendar):
     #print(event)
     #print(event['eventId'])
 
-def editEvent(assignmentID, assignmentName, assignmentTime):
+def editEvent(assignmentID, assignmentName, assignmentTime, assignmentDescription, calendar):
     print("edit event")
     event = {
         'id': assignmentID,
         'summary': assignmentName,
-        'location': '800 Howard St., San Francisco, CA 94103',
-        'description': assignmentID,
+        'description': assignmentDescription,
         'start': {
             'dateTime': assignmentTime,
             'timeZone': 'UTC',
