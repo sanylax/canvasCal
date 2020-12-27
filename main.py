@@ -25,7 +25,7 @@ def getDescription(assignment):
         description = ''
     return description
 
-def main():
+def processAssignments():
     # Canvas API URL
     if path.exists('canvas.txt'):
         file = open('canvas.txt', 'r')
@@ -96,9 +96,9 @@ def main():
         file.write(str(s) + '\n')
     file.close()
 
-import time
-while True:
-    
-    main()
-    print("Updated calendar...")
-    time.sleep(60 * 60 * 6)
+
+# if __name__ == 'main':
+#     import time
+#     while True:
+#         print("Updated calendar...")
+#         # time.sleep(60 * 60 * 6)

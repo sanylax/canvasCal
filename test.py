@@ -1,26 +1,32 @@
 import pystray
 from pystray import Menu, MenuItem
 
-import time
 from PIL import Image
 
 import main
 
+from threading import Event
+
 image = Image.open("apple.png")
 
-def exit(icon):
+exitEvent = Event()
+
+def exitAction(icon):
     icon.visible = False
+    exitEvent.set()
     icon.stop()
 
 def callback(icon):
     icon.visible = True
-    while icon.visible:
-        main()
+    while icon.visible and not exitEvent.is_set():
+        main.processAssignments()
         print("Updated calendar...")
-        time.sleep(60 * 60 * 6)
+        exitEvent.wait(60 * 60 * 6)
 
 icon = pystray.Icon('test name', image)
+icon.title = 'CanvasCal'
 icon.menu = Menu(
-    MenuItem('Exit', lambda: exit(icon))
+    MenuItem('CanvasCal', None, enabled=False),
+    MenuItem('Exit', lambda: exitAction(icon))
 )
 icon.run(callback)
