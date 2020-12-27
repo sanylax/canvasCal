@@ -1,3 +1,5 @@
+# pyinstaller --hidden-import="pkg_resources.py2_warn" --hidden-import="googleapiclient" --hidden-import="apiclient"  main.py --windowed --hidden-import plyer.platforms.win.notification --onefile
+
 from canvasapi import Canvas
 import ast
 import gcal
@@ -34,7 +36,6 @@ def main():
         failed()
 
     # Canvas API key
-    # exit()
     # Initialize a new Canvas object
     canvas = Canvas(API_URL, API_KEY)
     if path.exists('dict.txt'):
@@ -54,13 +55,7 @@ def main():
         failed()
 
     blacklist = []
-    whitelist = []
     if path.exists('blacklist.txt'):
-        # while True:
-        #     line = file.readline()
-        #     if not line:
-        #         break
-        #     blacklist.append(line.strip())
         file = open('blacklist.txt', 'r')
         for s in file:
             blacklist.append(s.strip())
@@ -102,11 +97,8 @@ def main():
     file.close()
 
 import time
-failed()
-exit()
-
-# while True:
+while True:
     
-#     main()
-#     print("Updated calendar...")
-#     time.sleep(60 * 60 * 6)
+    main()
+    print("Updated calendar...")
+    time.sleep(60 * 60 * 6)
