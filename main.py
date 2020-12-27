@@ -95,10 +95,3 @@ def processAssignments():
     for s in blacklist:
         file.write(str(s) + '\n')
     file.close()
-
-
-# if __name__ == 'main':
-#     import time
-#     while True:
-#         print("Updated calendar...")
-#         # time.sleep(60 * 60 * 6)
