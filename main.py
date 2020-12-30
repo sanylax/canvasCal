@@ -4,15 +4,6 @@ from canvasapi import Canvas
 import ast
 import gcal
 from os import path
-from plyer.utils import platform
-from plyer import notification
-def failed():
-    notification.notify(
-        title='CanvasCal failed to run',
-        message='Please run setup.exe',
-        app_name='CanvasCal',
-        #app_icon='path/to/the/icon.' + ('ico' if platform == 'win' else 'png')
-    )
 
 def getDescription(assignment):
     if assignment.html_url and assignment.description:
@@ -25,7 +16,7 @@ def getDescription(assignment):
         description = ''
     return description
 
-def processAssignments():
+def processAssignments(onFailure):
     # Canvas API URL
     if path.exists('canvas.txt'):
         file = open('canvas.txt', 'r')
@@ -33,7 +24,9 @@ def processAssignments():
         API_KEY = file.readline().strip()
         file.close()
     else:
-        failed()
+        # failed()
+        onFailure()
+        return
 
     # Canvas API key
     # Initialize a new Canvas object
@@ -44,7 +37,9 @@ def processAssignments():
             d = ast.literal_eval(s)
         file.close()
     else:
-        failed()
+        # failed()
+        onFailure()
+        return
 
     if path.exists('calendar.txt'):
         file = open('calendar.txt', 'r')
@@ -52,7 +47,9 @@ def processAssignments():
             calendarid = s
         file.close()
     else:
-        failed()
+        # failed()
+        onFailure()
+        return
 
     blacklist = []
     if path.exists('blacklist.txt'):
@@ -62,7 +59,9 @@ def processAssignments():
         file.close()
 
     else:
-       failed()
+       # failed()
+        onFailure()
+        return
 
     for course in canvas.get_courses(enrollment_state='active'):
         if str(course.id) not in blacklist:
