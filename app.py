@@ -1,32 +1,17 @@
-import pystray
-from pystray import Menu, MenuItem
+import rumps
 
-from PIL import Image
+class AwesomeStatusBarApp(rumps.App):
+    @rumps.clicked("Preferences")
+    def prefs(self, _):
+        rumps.alert("jk! no preferences available!")
 
-import main
+    @rumps.clicked("Silly button")
+    def onoff(self, sender):
+        sender.state = not sender.state
 
-from threading import Event
+    @rumps.clicked("Say hi")
+    def sayhi(self, _):
+        rumps.notification("Awesome title", "amazing subtitle", "hi!!1")
 
-image = Image.open("apple.png")
-
-exitEvent = Event()
-
-def exitAction(icon):
-    icon.visible = False
-    exitEvent.set()
-    icon.stop()
-
-def callback(icon):
-    icon.visible = True
-    while icon.visible and not exitEvent.is_set():
-        main.processAssignments()
-        print("Updated calendar...")
-        exitEvent.wait(60 * 60 * 6)
-
-icon = pystray.Icon('test name', image)
-icon.title = 'CanvasCal'
-icon.menu = Menu(
-    MenuItem('CanvasCal', None, enabled=False),
-    MenuItem('Exit', lambda: exitAction(icon))
-)
-icon.run(callback)
+if __name__ == "__main__":
+    AwesomeStatusBarApp("Awesome App").run()
