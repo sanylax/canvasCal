@@ -1,5 +1,6 @@
 /venv
-
+.vscode/
+blacklist.txt
 credentials.json
 token.pickle
 *.exe
