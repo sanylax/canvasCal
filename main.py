@@ -26,9 +26,10 @@ def getDescription(assignment):
     return description
 
 def processAssignments():
+    print('Refreshing')
     # Canvas API URL
-    if path.exists('canvas.txt'):
-        file = open('canvas.txt', 'r')
+    if path.exists('.canvasCal/canvas.txt'):
+        file = open('.canvasCal/canvas.txt', 'r')
         API_URL = file.readline().strip()
         API_KEY = file.readline().strip()
         file.close()
@@ -38,16 +39,16 @@ def processAssignments():
     # Canvas API key
     # Initialize a new Canvas object
     canvas = Canvas(API_URL, API_KEY)
-    if path.exists('dict.txt'):
-        file = open('dict.txt', 'r')
+    if path.exists('.canvasCal/'):
+        file = open('.canvasCal/dict.txt', 'r')
         for s in file:
             d = ast.literal_eval(s)
         file.close()
     else:
-        failed()
+        d = {}
 
-    if path.exists('calendar.txt'):
-        file = open('calendar.txt', 'r')
+    if path.exists('.canvasCal/calendar.txt'):
+        file = open('.canvasCal/calendar.txt', 'r')
         for s in file:
             calendarid = s
         file.close()
@@ -55,8 +56,8 @@ def processAssignments():
         failed()
 
     blacklist = []
-    if path.exists('blacklist.txt'):
-        file = open('blacklist.txt', 'r')
+    if path.exists('.canvasCal/blacklist.txt'):
+        file = open('.canvasCal/blacklist.txt', 'r')
         for s in file:
             blacklist.append(s.strip())
         file.close()
@@ -83,15 +84,15 @@ def processAssignments():
                     pass
                     #print(assignment.name)
 
-    file = open('dict.txt', 'w')
+    file = open('.canvasCal/dict.txt', 'w')
     file.write(str(d))
     file.close()
 
-    file = open('calendar.txt', 'w')
+    file = open('.canvasCal/calendar.txt', 'w')
     file.write(str(calendarid))
     file.close()
 
-    file = open('blacklist.txt', 'w')
+    file = open('.canvasCal/blacklist.txt', 'w')
     for s in blacklist:
         file.write(str(s) + '\n')
     file.close()
