@@ -43,12 +43,14 @@ def processAssignments():
         file.close()
     else:
         failed('canvas.txt')
+    print(API_KEY)
+    print(API_URL)
     print('got here2')
     # Canvas API key
     # Initialize a new Canvas object
     canvas = Canvas(API_URL, API_KEY)
     if path.exists(os.path.join(filepath, 'dict.txt')):
-        file = open(os.path.join(filepath, 'dixt.txt'), 'r')
+        file = open(os.path.join(filepath, 'dict.txt'), 'r')
         for s in file:
             d = ast.literal_eval(s)
         file.close()
@@ -90,7 +92,7 @@ def processAssignments():
                             continue
                     else:
                         print(assignment.name)
-                        exit()
+                        #exit()
                         #pdb.set_trace(assignment.name)
                         description = getDescription(assignment)
                         gcal.addEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid)   
