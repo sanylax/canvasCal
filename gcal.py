@@ -98,7 +98,6 @@ def editEvent(assignmentID, assignmentName, assignmentTime, assignmentDescriptio
             'dateTime': assignmentTime,
             'timeZone': 'UTC',
         },
-        
         'reminders': {
             'useDefault': False,
             'overrides': [

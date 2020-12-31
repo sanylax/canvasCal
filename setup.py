@@ -2,13 +2,14 @@ from setuptools import setup
 
 
 APP = ['app.py']
-DATA_FILES = []
+DATA_FILES = ['icon.png']
 OPTIONS = {
     'argv_emulation': True,
     'plist': {
         'LSUIElement': True,
     },
     'packages': ['rumps'],
+    'iconfile': 'icon.icns'
 }
 
 setup(
