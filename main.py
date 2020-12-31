@@ -1,12 +1,10 @@
 # pyinstaller --hidden-import="pkg_resources.py2_warn" --hidden-import="googleapiclient" --hidden-import="apiclient"  main.py --windowed --hidden-import plyer.platforms.win.notification --onefile
 
-from canvasapi import Canvas
 import ast
-import gcal
 import os
 from os import path
 from canvasapi import Canvas
-
+import gcal
 
 def failed(error):
     filepath = os.path.join(os.getenv("HOME"), '.canvasCal')

@@ -1,7 +1,8 @@
-from canvasapi import Canvas
-import gcal
 import os
 from os import path
+from canvasapi import Canvas
+import gcal
+
 filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 if not path.exists(filepath):
     os.mkdir(filepath)
@@ -39,7 +40,7 @@ print()
 print("The following courses will be added to your calendar:")
 for course in whitelist:
     print(course)
-    
+
 file = open(os.path.join(filepath, 'blacklist.txt'), 'w')
 for s in blacklist:
     file.write(str(s) + '\n')
