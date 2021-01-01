@@ -9,29 +9,33 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 creds = None
 service = None
+filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 # The file token.pickle stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
 def createPickle():
-    filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
-    if os.path.exists(os.path.join(filepath, 'token.pickle')):
-        with open(os.path.join(filepath, 'token.pickle'), 'rb') as token:
-            creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            credConfig = {"installed":{"client_id":"716399777084-q3nv38445ht9qnopi4s822naq7nqm6hc.apps.googleusercontent.com","project_id":"canvascal-1608517477785","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"u6xmpI1XiVxKh23lEhMxxHgr","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
-            # flow = InstalledAppFlow.from_client_secrets_file(
-            #     'credentials.json', SCOPES)
-            flow = InstalledAppFlow.from_client_config(credConfig, SCOPES)
-            creds = flow.run_local_server(port=0)
-        # Save the credentials for the next run
-        with open(os.path.join(filepath, 'token.pickle'), 'wb') as token:
-            pickle.dump(creds, token)
-    service = build('calendar', 'v3', credentials=creds)
+    credConfig = {"installed":{"client_id":"716399777084-q3nv38445ht9qnopi4s822naq7nqm6hc.apps.googleusercontent.com","project_id":"canvascal-1608517477785","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"u6xmpI1XiVxKh23lEhMxxHgr","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
+    # flow = InstalledAppFlow.from_client_secrets_file(
+    #     'credentials.json', SCOPES)
+    flow = InstalledAppFlow.from_client_config(credConfig, SCOPES)
+    creds = flow.run_local_server(port=0)
+    # Save the credentials for the next run
+    with open(os.path.join(filepath, 'token.pickle'), 'wb') as token:
+        pickle.dump(creds, token)
 
+    service = build('calendar', 'v3', credentials=creds)
+    
+def loadPickle():
+    if os.path.exists(os.path.join(filepath, 'token.pickle')):
+            with open(os.path.join(filepath, 'token.pickle'), 'rb') as token:
+                creds = pickle.load(token)
+            if not creds or not creds.valid:
+                createPickle()
+            else:
+                service = build('calendar', 'v3', credentials=creds)
+
+        
 def printCalendars():
     page_token = None
     while True:

@@ -25,6 +25,7 @@ def getDescription(assignment):
     return description
 
 def processAssignments():
+    gcal.loadPickle()
     print('Refreshing Events')
     filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
     # Canvas API URL

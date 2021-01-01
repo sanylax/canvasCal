@@ -6,10 +6,10 @@ from canvasapi import Canvas
 
 filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 if not path.exists(filepath):
-    print('folder doesnt exist')
+    #print('folder doesnt exist')
     os.mkdir(filepath)
-else:
-    print('folder exists')
+# else:
+#     print('folder exists')
 
 gcal.createPickle()
 
