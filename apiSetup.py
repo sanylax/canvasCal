@@ -1,11 +1,17 @@
 import os
 from os import path
-from canvasapi import Canvas
 import gcal
+from canvasapi import Canvas
+
 
 filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 if not path.exists(filepath):
+    print('folder doesnt exist')
     os.mkdir(filepath)
+else:
+    print('folder exists')
+
+gcal.createPickle()
 
 API_URL = input("Please enter your institution's canvas url (like 'https://example.instructure.com'): ")
 API_KEY = input("Please enter your canvas API key: ")
