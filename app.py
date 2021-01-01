@@ -1,8 +1,9 @@
 import rumps
 import main
 
-@rumps.timer(45)
+@rumps.timer(60*60*5)
 def refresh(sender):
+    rumps.notification("CanvasCal", subtitle = 'Refreshing', message ='')
     main.processAssignments()
 
 if __name__ == "__main__":
