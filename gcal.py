@@ -28,12 +28,12 @@ def createPickle():
     
 def loadPickle():
     if os.path.exists(os.path.join(filepath, 'token.pickle')):
-            with open(os.path.join(filepath, 'token.pickle'), 'rb') as token:
-                creds = pickle.load(token)
-            if not creds or not creds.valid:
-                createPickle()
-            else:
-                service = build('calendar', 'v3', credentials=creds)
+        with open(os.path.join(filepath, 'token.pickle'), 'rb') as token:
+            creds = pickle.load(token)
+        if not creds or not creds.valid:
+            createPickle()
+        else:
+            service = build('calendar', 'v3', credentials=creds)
 
         
 def printCalendars():
