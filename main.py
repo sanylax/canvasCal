@@ -5,12 +5,17 @@ import os
 from os import path
 from canvasapi import Canvas
 import gcal
+from datetime import datetime
 
-def failed(error):
-    filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
+global filepath
+filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
+
+def log(code):
     file = open(file = open(os.path.join(filepath, 'errorlog.txt'), 'w'))
-    file.write(error)
+    now = datetime.now().strftime('%m/%d/%Y	%H:%M%S')
+    file.write(now, code, '\n')
     file.close()
+    return code
     
 
 def getDescription(assignment):
@@ -24,23 +29,15 @@ def getDescription(assignment):
         description = ''
     return description
 
-def processAssignments():
+def processAssignments(API_URL, API_KEY):
     gcal.loadPickle()
     print('Refreshing Events')
-    filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
-    # Canvas API URL
-    if path.exists(os.path.join(filepath, 'canvas.txt')):
-        file = open(os.path.join(filepath, 'canvas.txt'), 'r')
-        API_URL = file.readline().strip()
-        API_KEY = file.readline().strip()
-        file.close()
-    else:
-        failed('canvas')
-    # Canvas API key
+    courseDir = os.path.join(filepath, API_URL)
+   
     # Initialize a new Canvas object
     canvas = Canvas(API_URL, API_KEY)
-    if path.exists(os.path.join(filepath, 'dict.txt')):
-        file = open(os.path.join(filepath, 'dict.txt'), 'r')
+    if path.exists(os.path.join(courseDir, 'dict.txt')):
+        file = open(os.path.join(courseDir, 'dict.txt'), 'r')
         for s in file:
             events = ast.literal_eval(s)
         file.close()
@@ -53,16 +50,16 @@ def processAssignments():
             calendarid = s
         file.close()
     else:
-        failed('calendar')
+        return log('calendar')
 
     blacklist = []
-    if path.exists(os.path.join(filepath, 'blacklist.txt')):
-        file = open(os.path.join(filepath, 'blacklist.txt'), 'r')
+    if path.exists(os.path.join(courseDir, 'blacklist.txt')):
+        file = open(os.path.join(courseDir, 'blacklist.txt'), 'r')
         for s in file:
             blacklist.append(s.strip())
         file.close()
     else:
-        failed('blacklist')
+        return log('blacklist')
 
     for course in canvas.get_courses(enrollment_state='active'):
         if str(course.id) not in blacklist:
@@ -81,15 +78,17 @@ def processAssignments():
                 else:
                     pass
 
-    file = open(os.path.join(filepath, 'dict.txt'), 'w')
+    file = open(os.path.join(courseDir, 'dict.txt'), 'w')
     file.write(str(events))
     file.close()
 
-    file = open(os.path.join(filepath, 'calendar.txt'), 'w')
+    file = open(os.path.join(courseDir, 'calendar.txt'), 'w')
     file.write(str(calendarid))
     file.close()
 
-    file = open(os.path.join(filepath, 'blacklist.txt'), 'w')
+    file = open(os.path.join(courseDir, 'blacklist.txt'), 'w')
     for s in blacklist:
         file.write(str(s) + '\n')
     file.close()
+
+    return log(0) 
