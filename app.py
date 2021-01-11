@@ -7,7 +7,7 @@ def refresh(sender):
     rumps.notification("CanvasCal", subtitle = 'Refreshing', message ='')
     file = open(os.path.join(main.filepath, 'index.txt'), 'r')
     numCourses = int(file.readline().strip())
-    
+    print(numCourses)
     for i in range(numCourses):
         URL = file.readline().strip()
         KEY = file.readline().strip()

@@ -7,13 +7,14 @@ from google.auth.transport.requests import Request
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-creds = None
 service = None
+creds = None
 filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 # The file token.pickle stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
 def createPickle():
+    global service
     # If there are no (valid) credentials available, let the user log in.
     credConfig = {"installed":{"client_id":"716399777084-q3nv38445ht9qnopi4s822naq7nqm6hc.apps.googleusercontent.com","project_id":"canvascal-1608517477785","auth_uri":"https://accounts.google.com/o/oauth2/auth","token_uri":"https://oauth2.googleapis.com/token","auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs","client_secret":"u6xmpI1XiVxKh23lEhMxxHgr","redirect_uris":["urn:ietf:wg:oauth:2.0:oob","http://localhost"]}}
     # flow = InstalledAppFlow.from_client_secrets_file(
@@ -27,6 +28,7 @@ def createPickle():
     service = build('calendar', 'v3', credentials=creds)
     
 def loadPickle():
+    global service
     if os.path.exists(os.path.join(filepath, 'token.pickle')):
         with open(os.path.join(filepath, 'token.pickle'), 'rb') as token:
             creds = pickle.load(token)
@@ -37,6 +39,7 @@ def loadPickle():
 
         
 def printCalendars():
+    global service
     page_token = None
     while True:
         calendar_list = service.calendarList().list(pageToken=page_token).execute()
@@ -49,6 +52,7 @@ def printCalendars():
             break
 
 def createCalendar():
+    global service
     calendar = {
         'summary': 'Canvas Assignments',
         'timeZone': 'UTC'

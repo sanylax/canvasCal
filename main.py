@@ -11,9 +11,9 @@ global filepath
 filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 
 def log(code):
-    file = open(file = open(os.path.join(filepath, 'errorlog.txt'), 'w'))
+    file = open(os.path.join(filepath, 'errorlog.txt'), 'w')
     now = datetime.now().strftime('%m/%d/%Y	%H:%M%S')
-    file.write(now, code, '\n')
+    file.write(now + ' ' + code + '\n')
     file.close()
     return code
     
@@ -32,10 +32,12 @@ def getDescription(assignment):
 def processAssignments(API_URL, API_KEY):
     gcal.loadPickle()
     print('Refreshing Events')
-    courseDir = os.path.join(filepath, API_URL)
    
     # Initialize a new Canvas object
     canvas = Canvas(API_URL, API_KEY)
+    institutionName = canvas.search_accounts(**{'domain':API_URL[8:-1]})[0]['name']
+    courseDir = os.path.join(filepath, institutionName.replace(' ', '_'))
+
     if path.exists(os.path.join(courseDir, 'dict.txt')):
         file = open(os.path.join(courseDir, 'dict.txt'), 'r')
         for s in file:
@@ -73,7 +75,8 @@ def processAssignments(API_URL, API_KEY):
                             continue
                     else:
                         description = getDescription(assignment)
-                        gcal.addEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid)   
+                        gcal.addEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid)  
+                        print(assignment.name)
                     events[assignment.id] = (assignment.name, assignment.due_at)
                 else:
                     pass
@@ -91,4 +94,4 @@ def processAssignments(API_URL, API_KEY):
         file.write(str(s) + '\n')
     file.close()
 
-    return log(0) 
+    return log(institutionName + ' 0') 
