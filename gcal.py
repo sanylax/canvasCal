@@ -3,13 +3,16 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from os.path import expanduser
+home = expanduser("~")
+global filepath
+filepath = os.path.join(home, '.canvasCal')
 
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 service = None
 creds = None
-filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 # The file token.pickle stores the user's access and refresh tokens, and is
 # created automatically when the authorization flow completes for the first
 # time.
@@ -36,7 +39,8 @@ def loadPickle():
             createPickle()
         else:
             service = build('calendar', 'v3', credentials=creds)
-
+    else:
+        createPickle()
         
 def printCalendars():
     global service

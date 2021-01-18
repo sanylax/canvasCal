@@ -6,9 +6,10 @@ from os import path
 from canvasapi import Canvas
 import gcal
 from datetime import datetime
-
+from os.path import expanduser
+home = expanduser("~")
 global filepath
-filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
+filepath = os.path.join(home, '.canvasCal')
 
 def log(code):
     file = open(os.path.join(filepath, 'errorlog.txt'), 'w')

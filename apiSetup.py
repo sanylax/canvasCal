@@ -2,9 +2,11 @@ import os
 from os import path
 import gcal
 from canvasapi import Canvas
+from os.path import expanduser
+home = expanduser("~")
+global filepath
+filepath = os.path.join(home, '.canvasCal')
 
-
-filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
 if not path.exists(filepath):
     #print('folder doesnt exist')
     os.mkdir(filepath)
