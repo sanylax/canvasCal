@@ -1,9 +1,22 @@
 # pyinstaller --hidden-import="pkg_resources.py2_warn" --hidden-import="googleapiclient" --hidden-import="apiclient"  main.py --windowed --hidden-import plyer.platforms.win.notification --onefile
 
-from canvasapi import Canvas
 import ast
-import gcal
+import os
 from os import path
+from canvasapi import Canvas
+import gcal
+from datetime import datetime
+
+global filepath
+filepath = os.path.join(os.getenv("HOME"), '.canvasCal')
+
+def log(code):
+    file = open(os.path.join(filepath, 'errorlog.txt'), 'w')
+    now = datetime.now().strftime('%m/%d/%Y	%H:%M%S')
+    file.write(now + ' ' + code + '\n')
+    file.close()
+    return code
+    
 
 def getDescription(assignment):
     if assignment.html_url and assignment.description:
@@ -16,81 +29,69 @@ def getDescription(assignment):
         description = ''
     return description
 
-def processAssignments(onFailure):
-    # Canvas API URL
-    if path.exists('canvas.txt'):
-        file = open('canvas.txt', 'r')
-        API_URL = file.readline().strip()
-        API_KEY = file.readline().strip()
-        file.close()
-    else:
-        # failed()
-        onFailure()
-        return
-
-    # Canvas API key
+def processAssignments(API_URL, API_KEY):
+    gcal.loadPickle()
+    print('Refreshing Events')
+   
     # Initialize a new Canvas object
     canvas = Canvas(API_URL, API_KEY)
-    if path.exists('dict.txt'):
-        file = open('dict.txt', 'r')
+    institutionName = canvas.search_accounts(**{'domain':API_URL[8:-1]})[0]['name']
+    courseDir = os.path.join(filepath, institutionName.replace(' ', '_'))
+
+    if path.exists(os.path.join(courseDir, 'dict.txt')):
+        file = open(os.path.join(courseDir, 'dict.txt'), 'r')
         for s in file:
-            d = ast.literal_eval(s)
+            events = ast.literal_eval(s)
         file.close()
     else:
-        # failed()
-        onFailure()
-        return
+        events = {}
 
-    if path.exists('calendar.txt'):
-        file = open('calendar.txt', 'r')
+    if path.exists(os.path.join(filepath, 'calendar.txt')):
+        file = open(os.path.join(filepath, 'calendar.txt'), 'r')
         for s in file:
             calendarid = s
         file.close()
     else:
-        # failed()
-        onFailure()
-        return
+        return log('calendar')
 
     blacklist = []
-    if path.exists('blacklist.txt'):
-        file = open('blacklist.txt', 'r')
+    if path.exists(os.path.join(courseDir, 'blacklist.txt')):
+        file = open(os.path.join(courseDir, 'blacklist.txt'), 'r')
         for s in file:
             blacklist.append(s.strip())
         file.close()
-
     else:
-       # failed()
-        onFailure()
-        return
+        return log('blacklist')
 
     for course in canvas.get_courses(enrollment_state='active'):
         if str(course.id) not in blacklist:
             for assignment in course.get_assignments():
                 if assignment.due_at is not None:
-                    if(assignment.id) in d.keys():
-                        if((assignment.name,assignment.due_at) != d[assignment.id]):
+                    if(assignment.id) in events.keys():
+                        if((assignment.name,assignment.due_at) != events[assignment.id]):
                             description = getDescription(assignment)
-                            print(gcal.editEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid))
+                            gcal.editEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid)
                         else:
                             continue
                     else:
-                        print(assignment.name)
                         description = getDescription(assignment)
-                        gcal.addEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid)   
-                    d[assignment.id] = (assignment.name, assignment.due_at)
+                        gcal.addEvent(assignment.id, assignment.name, assignment.due_at, description, calendarid)  
+                        print(assignment.name)
+                    events[assignment.id] = (assignment.name, assignment.due_at)
                 else:
                     pass
-                    #print(assignment.name)
 
-    file = open('dict.txt', 'w')
-    file.write(str(d))
+    file = open(os.path.join(courseDir, 'dict.txt'), 'w')
+    file.write(str(events))
     file.close()
 
-    file = open('calendar.txt', 'w')
+    file = open(os.path.join(courseDir, 'calendar.txt'), 'w')
     file.write(str(calendarid))
     file.close()
 
-    file = open('blacklist.txt', 'w')
+    file = open(os.path.join(courseDir, 'blacklist.txt'), 'w')
     for s in blacklist:
         file.write(str(s) + '\n')
     file.close()
+
+    return log(institutionName + ' 0') 
