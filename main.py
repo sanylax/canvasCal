@@ -11,7 +11,7 @@ home = expanduser("~")
 global filepath
 filepath = os.path.join(home, '.canvasCal')
 
-def log(code):
+def log(code, message):
     file = open(os.path.join(filepath, 'errorlog.txt'), 'w')
     now = datetime.now().strftime('%m/%d/%Y	%H:%M%S')
     file.write(now + ' ' + code + '\n')
@@ -95,4 +95,5 @@ def processAssignments(API_URL, API_KEY):
         file.write(str(s) + '\n')
     file.close()
 
-    return log(institutionName + ' 0') 
+    log('0', institutionName)
+    return 0, institutionName

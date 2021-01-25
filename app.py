@@ -11,9 +11,12 @@ def refresh(sender):
     for i in range(numCourses):
         URL = file.readline().strip()
         KEY = file.readline().strip()
-        code = main.processAssignments(URL, KEY)
+        code, message = main.processAssignments(URL, KEY)
         if code != 0:
             rumps.notification("CanvasCal", subtitle = 'Error', message =code)
+        else:
+            rumps.notification("CanvasCal", subtitle = 'Updated', message =message)
+
 
 
 
