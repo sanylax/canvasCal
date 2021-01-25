@@ -91,8 +91,6 @@ def createCalendar():
     }
     created_calendar = service.calendars().insert(body=calendar).execute()
     ourCalendarId = created_calendar['id']
-    print(ourCalendarId)
-    print(created_calendar['summary'])
     return ourCalendarId
     
     

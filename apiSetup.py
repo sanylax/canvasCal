@@ -12,7 +12,7 @@ if not path.exists(filepath):
     os.mkdir(filepath)
 # else:
 #     print('folder exists')
-gcal.loadPickle()
+gcal.createPickle()
 
 API_DICT = {}
 while True:
@@ -46,7 +46,7 @@ for URL,KEY in API_DICT.items():
     whitelist = []
     for course in canvas.get_courses(enrollment_state='active'):
         print(course.name)
-        choice = input('Type y if you want to keep this course or anything else to ignore it: ')
+        choice = input('Type Y if you want to keep this course or anything else to ignore it: ')
         if choice.upper() != 'Y':
             blacklist.append(str(course.id))
         else:
