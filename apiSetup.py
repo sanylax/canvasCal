@@ -3,9 +3,14 @@ from os import path
 import gcal
 from canvasapi import Canvas
 from os.path import expanduser
+
+
+
+
 home = expanduser("~")
 global filepath
 filepath = os.path.join(home, '.canvasCal')
+
 
 if not path.exists(filepath):
     #print('folder doesnt exist')
@@ -22,8 +27,6 @@ while True:
     if input('Type Y to add another institution or any other button to exit: ').upper() != 'Y':
         break
 
-
-
 file = open(os.path.join(filepath, 'index.txt'), 'w')
 file.write(str(len(API_DICT)) + '\n')
 for URL,KEY in API_DICT.items():
@@ -38,7 +41,7 @@ for URL,KEY in API_DICT.items():
         os.mkdir(courseDir)
 
     d = {}
-    file = open(os.path.join(courseDir, 'dict.txt'), 'w')
+    file = open(os.path.join(courseDir, 'events.txt'), 'w')
     file.write(str(d))
     file.close()
 
@@ -61,7 +64,9 @@ for URL,KEY in API_DICT.items():
         file.write(str(s) + '\n')
     file.close()
 
+print("Creating calendar...")
 calendarid = gcal.createCalendar()
 file = open(os.path.join(filepath, 'calendar.txt'), 'w')
 file.write(str(calendarid))
 file.close()
+print("Done!")

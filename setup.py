@@ -1,6 +1,5 @@
 from setuptools import setup
 
-
 APP = ['app.py']
 DATA_FILES = ['icon.png']
 OPTIONS = {
